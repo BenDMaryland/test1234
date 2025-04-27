@@ -4,6 +4,23 @@ import axios from "axios";
 function ItemList({ refreshFlag }) {
   const [items, setItems] = useState([]);
 
+function deleteHandler(item){
+ 
+
+
+setItems((currentItems)=>{
+ 
+
+   let newthing=  currentItems.filter((currentItem)=>{
+       if( currentItem!==item) return item
+    })
+
+console.log("newthing",newthing)
+return newthing
+
+})
+}
+
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/items/")
       .then((response) => {
@@ -14,7 +31,7 @@ function ItemList({ refreshFlag }) {
       });
   }, [refreshFlag]); // re-fetch when refreshFlag changes
 
-  
+
   return (
     <div>
       <h2>Items</h2>
@@ -25,6 +42,7 @@ function ItemList({ refreshFlag }) {
           {items.map((item) => (
             <li key={item.id}>
               <strong>{item.title}</strong>: {item.description}
+              <button onClick={()=>deleteHandler(item)}>delete</button>
             </li>
           ))}
         </ul>
