@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import SessionLocal, init_db
 from models import Item
@@ -6,6 +7,14 @@ from models import Item
 from pydantic import BaseModel
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # allow all methods (GET, POST, PUT, DELETE, OPTIONS)
+    allow_headers=["*"],  # allow all headers
+)
+
 init_db()
 
 
