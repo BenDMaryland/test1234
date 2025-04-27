@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends,HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import SessionLocal, init_db
@@ -44,3 +44,12 @@ def create_item(item: ItemCreate, db: Session = Depends(get_db)):
 @app.get("/items/")
 def read_items(db: Session = Depends(get_db)):
     return db.query(Item).all()
+
+@app.delete("/items/{item_id}")
+def delete_item(item_id: int, db: Session = Depends(get_db)):
+    db_item = db.query(Item).filter(Item.id == item_id).first()
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    db.delete(db_item)
+    db.commit()
+    return {"message": "Item deleted successfully"}

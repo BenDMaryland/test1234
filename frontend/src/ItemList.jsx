@@ -6,7 +6,13 @@ function ItemList({ refreshFlag }) {
 
 function deleteHandler(item){
  
-
+    axios.delete(`http://127.0.0.1:8000/items/${item.id}`)
+    .then(response => {
+        console.log('User deleted successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error deleting user:', error);
+      }, [refreshFlag]); // re-fetch when refreshFlag changes
 
 setItems((currentItems)=>{
  
@@ -19,7 +25,7 @@ console.log("newthing",newthing)
 return newthing
 
 })
-}
+ }
 
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/items/")
