@@ -49,13 +49,27 @@ function ItemList({ refreshFlag }) {
             ) : (
                 <ul>
                     {items.map((item) => (
-                        <li key={item.id}>
-                            <strong>{item.title}</strong>: {item.description}
-                            <button style={buttonStyle} onClick={() => deleteHandler(item)}>delete</button>
-                            <button style={buttonStyle} onClick={() => setIsEditable(!iseditable)}>edit</button>
-                            
-                        </li>
+                        <div key={item.id}>
+                            {editItemId === item.id ? (
+                                <>
+                                    <input
+                                        type="text"
+                                        value={editItemName}
+                                        onChange={(e) => setEditItemName(e.target.value)}
+                                    />
+                                    <button onClick={handleUpdate}>Save</button>
+                                    <button onClick={cancelEditing}>Cancel</button>
+                                </>
+                            ) : (
+                                <>
+                                    {item.name}
+                                    <button onClick={() => startEditing(item)}>Edit</button>
+                                    <button onClick={() => handleDelete(item.id)}>Delete</button>
+                                </>
+                            )}
+                        </div>
                     ))}
+
                 </ul>
             )}
         </div>
