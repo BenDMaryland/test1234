@@ -59,7 +59,7 @@ def update_item(item_id: int, updated_item: ItemCreate, db: Session = Depends(ge
     item = db.query(Item).filter(Item.id == item_id).first()
     if item is None:
         raise HTTPException(status_code=404, detail="Item not found")
-    item.name = updated_item.name
+    item.title = updated_item.title
     db.commit()
     db.refresh(item)
     return item

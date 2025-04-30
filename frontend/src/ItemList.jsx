@@ -1,68 +1,4 @@
-// import { useEffect, useState } from "react";
-// import axios from "axios";
 
-// function ItemList({ refreshFlag }) {
-//     const [items, setItems] = useState([]);
-//     const [iseditable, setIsEditable] = useState(false);
-
-
-//     const buttonStyle = {
-//         padding: '0.5rem 1rem', fontSize: '1rem'
-//     }
-
-//     function deleteHandler(item) {
-//         axios
-//             .delete(`http://127.0.0.1:8000/items/${item.id}`)
-//             .then((response) => {
-//                 console.log("Item deleted successfully:", response.data);
-//                 // Remove the deleted item from the local state
-//                 setItems((currentItems) => {
-//                     return currentItems.filter((currentItem) => currentItem.id !== item.id);
-//                 });
-//             })
-//             .catch((error) => {
-//                 console.error("Error deleting item:", error);
-//             });
-//     }
-
-//     function editeHandler(item) {
-
-//     }
-
-
-//     useEffect(() => {
-//         axios.get("http://127.0.0.1:8000/items/")
-//             .then((response) => {
-//                 setItems(response.data);
-//             })
-//             .catch((error) => {
-//                 console.error("Error fetching items:", error);
-//             });
-//     }, [refreshFlag]); // re-fetch when refreshFlag changes
-
-
-//     return (
-//         <div>
-//             <h2>Items</h2>
-//             {items.length === 0 ? (
-//                 <p>No items yet.</p>
-//             ) : (
-//                 <ul>
-//                     {items.map((item) => (
-//                         <li key={item.id}>
-//                             <strong>{item.title}</strong>: {item.description}
-//                             <button style={buttonStyle} onClick={() => deleteHandler(item)}>delete</button>
-//                             <button style={buttonStyle} onClick={() => setIsEditable(!iseditable)}>edit</button>
-                            
-//                         </li>
-//                     ))}
-//                 </ul>
-//             )}
-//         </div>
-//     );
-// }
-
-// export default ItemList;
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -98,7 +34,10 @@ function ItemList({ refreshFlag }) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ name: editItemName }),
+                body: JSON.stringify({
+                    title: editItemName,
+                    description: "Updated description" // or use item.description if you want to preserve it
+                }),
             });
 
             if (response.ok) {
@@ -107,12 +46,14 @@ function ItemList({ refreshFlag }) {
                 setEditItemName("");
                 setRefreshFlag((prev) => !prev); // Refresh items
             } else {
-                console.error("Failed to update item.");
+                const errorData = await response.json();
+                console.error("Failed to update item:", errorData);
             }
         } catch (error) {
             console.error("Error updating item:", error);
         }
     };
+
 
     function deleteHandler(item) {
         axios
@@ -153,7 +94,8 @@ function ItemList({ refreshFlag }) {
                     {items.map((item) => (
                         <div key={item.id}>
 
-                            <strong>{item.title}</strong>: {item.description}
+                            <li><b>Item Name:</b> {item.title}</li>
+                            <li> <b>Item description: </b> {item.description}</li>
                             <button style={buttonStyle} onClick={() => deleteHandler(item)}>delete</button>
                             {editItemId === item.id ? (
                                 <>
