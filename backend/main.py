@@ -28,7 +28,7 @@ def get_db():
 class ItemCreate(BaseModel):
     title: str
     description: str
-
+d
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
